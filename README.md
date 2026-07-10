@@ -138,6 +138,60 @@ every push.
 - Retrosynthesis-aware synthesizability scoring
 - LLM agent front-end that plans multi-step discovery campaigns
 
+## Contributing
+
+Contributions are welcome and appreciated — whether it's a bug fix, a new property
+model, a smarter generator, better docs, or just a typo. Here's how to get involved:
+
+1. **⭐ Star the repo** — if Alchemind is useful or interesting to you, please
+   [star it](https://github.com/AravindB98/alchemind). It helps others discover the project.
+2. **🍴 Fork the repo** — click **Fork** (top-right on GitHub) to create your own copy under
+   your account.
+3. **Clone your fork and set up the dev environment:**
+   ```bash
+   git clone https://github.com/<your-username>/alchemind.git
+   cd alchemind
+   pip install -e ".[dev]"
+   ```
+4. **Create a feature branch:**
+   ```bash
+   git checkout -b feature/my-improvement
+   ```
+5. **Make your change**, keeping the codebase style consistent. Add or update tests for any
+   new behaviour under `tests/`.
+6. **Run the checks locally** — please make sure they pass before opening a PR:
+   ```bash
+   ruff check src tests      # lint
+   pytest --cov=alchemind    # tests + coverage
+   ```
+7. **Commit** with a clear, descriptive message:
+   ```bash
+   git commit -m "Add <what you changed>"
+   ```
+8. **Push to your fork** and **open a Pull Request** against `main`:
+   ```bash
+   git push origin feature/my-improvement
+   ```
+   Then open a PR on GitHub describing *what* you changed and *why*.
+
+### Contribution ideas
+
+- New property predictors (toxicity, bioavailability, binding affinity)
+- Alternative generators (VAE, diffusion, reinforcement learning)
+- A larger, cited reference/training dataset and benchmark
+- Retrosynthesis-aware synthesizability scoring
+- UI/UX improvements and molecule visualization
+
+### Guidelines
+
+- Keep PRs focused — one logical change per PR is easier to review.
+- Every new feature should come with tests; CI (GitHub Actions) must be green.
+- Be respectful and constructive in issues and reviews. By contributing you agree your work
+  is licensed under the project's MIT license.
+
+Found a bug or have an idea? [Open an issue](https://github.com/AravindB98/alchemind/issues) —
+and don't forget to ⭐ **star** and 🍴 **fork** the repo to support the project!
+
 ## License
 
 MIT © 2026 Aravind Balaji
