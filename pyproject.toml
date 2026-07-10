@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "alchemind"
+version = "0.1.0"
+description = "Alchemind — an AI platform that invents, predicts, and validates novel chemical compounds."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Aravind Balaji" }]
+keywords = ["chemistry", "drug-discovery", "de-novo-design", "generative-ai", "cheminformatics", "rdkit"]
+dependencies = [
+    "rdkit>=2023.9.1",
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scikit-learn>=1.3",
+    "joblib>=1.3",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.6",
+]
+
+[project.optional-dependencies]
+deep = ["torch>=2.1"]
+dev = ["pytest>=8.0", "pytest-cov>=4.1", "httpx>=0.27", "ruff>=0.4"]
+
+[project.scripts]
+alchemind = "alchemind.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/AravindB98/alchemind"
+Repository = "https://github.com/AravindB98/alchemind"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+alchemind = ["web/*.html", "data/*.txt", "data/*.csv"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

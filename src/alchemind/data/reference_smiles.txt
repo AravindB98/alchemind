@@ -1,0 +1,28 @@
+# Reference set of KNOWN compounds (common drugs / building blocks).
+# Used by the validation layer for novelty checks: an invented molecule that
+# canonicalizes to any entry here (or is highly similar) is not considered novel.
+# One canonical SMILES per line. Lines starting with '#' are ignored.
+CC(=O)Oc1ccccc1C(=O)O
+CC(C)Cc1ccc(C(C)C(=O)O)cc1
+CN1C=NC2=C1C(=O)N(C)C(=O)N2C
+CC(=O)Nc1ccc(O)cc1
+OC(=O)c1ccccc1O
+Cn1cnc2c1c(=O)n(C)c(=O)n2C
+c1ccc(cc1)C(=O)O
+CCN(CC)CC(=O)Nc1c(C)cccc1C
+CN1CCC[C@H]1c1cccnc1
+C1=CC(=C(C=C1CCN)O)O
+Cc1ccc(cc1)S(=O)(=O)N
+CC(C)(C)NCC(O)c1ccc(O)c(CO)c1
+CN(C)CCCN1c2ccccc2CCc2ccccc21
+Clc1ccccc1C1=NCC(=O)Nc2ccc(cc21)N(=O)=O
+CN1CCN(CC1)c1ccc(cc1)OC
+OCC(O)C(O)C(O)C(O)CO
+Nc1ccc(cc1)S(=O)(=O)N
+CC12CCC3C(CCc4cc(O)ccc34)C1CCC2O
+CC(N)Cc1ccccc1
+Cc1ccccc1
+c1ccccc1
+CCO
+CO
+OCC1OC(O)C(O)C(O)C1O

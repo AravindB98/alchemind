@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Models / artifacts (trained weights are regenerated via scripts/)
+models/*.joblib
+models/*.pt
+models/*.pkl
+*.log
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets — never commit tokens or env files
+.env
+*.token
+secrets*

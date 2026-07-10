@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alchemind — De Novo Molecular Discovery</title>
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#7c5cff; --accent2:#2ea043; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+         background:var(--bg); color:var(--text); }
+  header { padding:28px 24px 12px; border-bottom:1px solid var(--border); }
+  h1 { margin:0; font-size:26px; letter-spacing:.3px; }
+  h1 span { color:var(--accent); }
+  .sub { color:var(--muted); margin-top:6px; font-size:14px; }
+  main { max-width:1080px; margin:0 auto; padding:24px; }
+  .controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;
+              background:var(--panel); border:1px solid var(--border);
+              border-radius:12px; padding:16px; }
+  label { display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  input, select { background:#0d1117; color:var(--text); border:1px solid var(--border);
+                  border-radius:8px; padding:9px 11px; font-size:14px; }
+  input#seed { min-width:320px; }
+  button { background:var(--accent); color:white; border:0; border-radius:8px;
+           padding:10px 18px; font-size:14px; font-weight:600; cursor:pointer; }
+  button.secondary { background:#21262d; border:1px solid var(--border); }
+  button:disabled { opacity:.5; cursor:progress; }
+  .status { margin:16px 2px; color:var(--muted); font-size:14px; min-height:20px; }
+  .summary { display:flex; gap:20px; flex-wrap:wrap; margin:8px 2px 20px; }
+  .summary div b { color:var(--accent2); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+          gap:16px; }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:12px;
+          padding:12px; }
+  .card svg { width:100%; height:auto; background:white; border-radius:8px; }
+  .smiles { font-family:ui-monospace,Menlo,monospace; font-size:11px; color:var(--muted);
+            word-break:break-all; margin:8px 0; }
+  .props { font-size:12px; line-height:1.7; }
+  .props .k { color:var(--muted); }
+  .badge { display:inline-block; font-size:10px; padding:2px 7px; border-radius:20px;
+           background:#1f6feb33; color:#79c0ff; margin-right:4px; }
+  .badge.novel { background:#2ea04333; color:#7ee787; }
+  footer { color:var(--muted); font-size:12px; text-align:center; padding:24px; }
+  code { color:#79c0ff; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Alchemind<span>·</span></h1>
+  <div class="sub">Invent, predict, and validate novel chemical compounds — de novo molecular discovery.</div>
+</header>
+<main>
+  <div class="controls">
+    <div>
+      <label for="seed">Seed molecule (SMILES)</label>
+      <input id="seed" value="CC(=O)Oc1ccccc1C(=O)O" />
+    </div>
+    <div>
+      <label for="objective">Objective</label>
+      <select id="objective">
+        <option value="qed">Drug-likeness (QED)</option>
+        <option value="solubility">Aqueous solubility (logS)</option>
+        <option value="drug_likeness">Drug-like &amp; synthesizable</option>
+      </select>
+    </div>
+    <div>
+      <label for="n">Candidates</label>
+      <input id="n" type="number" value="12" min="1" max="60" style="width:80px" />
+    </div>
+    <button id="discoverBtn" onclick="discover()">Invent molecules</button>
+    <button class="secondary" onclick="predictSeed()">Analyze seed</button>
+  </div>
+
+  <div class="status" id="status">Enter a seed molecule and press “Invent molecules”.</div>
+  <div class="summary" id="summary"></div>
+  <div class="grid" id="results"></div>
+</main>
+<footer>
+  Alchemind · genetic de novo generation + RDKit/ML property prediction + validity/novelty/synthesizability gating.
+  API docs at <code>/docs</code>.
+</footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+function card(c) {
+  const p = c.properties || {};
+  const badges =
+    (c.novel ? '<span class="badge novel">novel</span>' : '') +
+    (c.passed_validation ? '<span class="badge">validated</span>' : '');
+  return `<div class="card">
+    ${c.svg || '<div style="height:200px"></div>'}
+    <div class="smiles">${c.smiles}</div>
+    <div>${badges}</div>
+    <div class="props">
+      <div><span class="k">Objective score:</span> <b>${(c.objective_score ?? 0).toFixed(3)}</b></div>
+      <div><span class="k">QED:</span> ${c.qed ?? '—'} &nbsp; <span class="k">logS:</span> ${c.predicted_logS ?? '—'}</div>
+      <div><span class="k">Synth. (SA):</span> ${c.synthesizability ?? '—'} &nbsp; <span class="k">MW:</span> ${p.MolWt ?? '—'}</div>
+      <div><span class="k">Sim. to known:</span> ${c.similarity_to_known ?? '—'}</div>
+    </div>
+  </div>`;
+}
+
+async function discover() {
+  const btn = $('discoverBtn'); btn.disabled = true;
+  $('status').textContent = 'Evolving novel molecules… (generate → predict → validate → rank)';
+  $('results').innerHTML = ''; $('summary').innerHTML = '';
+  try {
+    const res = await fetch('/discover', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        seed_smiles: $('seed').value.trim(),
+        objective: $('objective').value,
+        n: parseInt($('n').value, 10),
+        include_svg: true
+      })
+    });
+    if (!res.ok) throw new Error((await res.json()).detail || res.statusText);
+    const data = await res.json();
+    $('summary').innerHTML =
+      `<div>Generated <b>${data.n_generated}</b></div>
+       <div>Valid <b>${data.n_valid}</b></div>
+       <div>Novel <b>${data.n_novel}</b></div>
+       <div>Objective <b>${data.objective}</b></div>`;
+    $('status').textContent = `Top ${data.candidates.length} novel candidates:`;
+    $('results').innerHTML = data.candidates.map(card).join('');
+  } catch (e) {
+    $('status').textContent = 'Error: ' + e.message;
+  } finally { btn.disabled = false; }
+}
+
+async function predictSeed() {
+  $('status').textContent = 'Analyzing seed…'; $('results').innerHTML=''; $('summary').innerHTML='';
+  try {
+    const res = await fetch('/predict', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ smiles: $('seed').value.trim() })
+    });
+    if (!res.ok) throw new Error((await res.json()).detail || res.statusText);
+    const d = await res.json();
+    $('status').textContent = 'Seed analysis:';
+    $('results').innerHTML = card({
+      smiles:d.smiles, svg:d.svg, qed:d.qed, predicted_logS:d.predicted_logS,
+      synthesizability:d.synthesizability, properties:d.properties,
+      objective_score:d.qed ?? 0, novel:false, passed_validation:true,
+      similarity_to_known:'—'
+    });
+  } catch(e) { $('status').textContent = 'Error: ' + e.message; }
+}
+</script>
+</body>
+</html>
