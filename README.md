@@ -195,3 +195,19 @@ and don't forget to ⭐ **star** and 🍴 **fork** the repo to support the proje
 ## License
 
 MIT © 2026 Aravind Balaji
+
+---
+
+## 🧒 Explain Like I'm 5
+
+Imagine LEGO for molecules: a computer that invents brand-new chemical compounds by snapping atomic pieces together, then double-checks its inventions are stable, safe, and actually makeable. Alchemind is that end-to-end pipeline — invent, predict properties, validate.
+
+## 🧰 Tech Stack
+
+Python · RDKit · generative molecular models · property prediction · validation pipeline
+
+## 🌍 Real-Life Applications
+
+- Early-stage drug discovery — generating candidate molecules cheaply
+- Materials science — hunting for compounds with target properties
+- Chemistry education — visualizing how structure drives properties
