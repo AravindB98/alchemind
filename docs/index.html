@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>alchemind — De novo molecular discovery</title>
+<meta name="description" content="De novo molecular discovery — invent, predict, and validate novel chemical compounds end to end.">
+<style>
+:root{--accent:#c678dd;--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.65}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{padding:72px 0 48px;text-align:center;background:radial-gradient(ellipse at top,color-mix(in srgb,var(--accent) 18%,transparent),transparent 65%)}
+h1{font-size:2.6rem;margin-bottom:8px}
+.emoji{font-size:3.2rem;display:block;margin-bottom:12px}
+.tagline{color:var(--muted);font-size:1.15rem;max-width:640px;margin:0 auto 24px}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.95rem}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{border:1px solid var(--border);color:var(--text)}
+section{padding:40px 0;border-top:1px solid var(--border)}
+h2{font-size:1.5rem;margin-bottom:16px;color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 14px;margin:4px;font-size:.88rem}
+ul.apps{list-style:none}ul.apps li{padding:8px 0 8px 28px;position:relative}
+ul.apps li:before{content:"✦";position:absolute;left:4px;color:var(--accent)}
+#demo{margin-top:8px}
+.demo-hint{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+button.demo-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-weight:600;cursor:pointer;font-size:.92rem;margin:4px 6px 4px 0}
+button.demo-btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+input[type=range]{accent-color:var(--accent)}
+canvas{background:#0a0e14;border:1px solid var(--border);border-radius:8px;max-width:100%}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:.85rem}
+footer{padding:36px 0;text-align:center;color:var(--muted);font-size:.9rem}
+footer a{color:var(--accent);text-decoration:none}
+.star-cta{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 25%,var(--card)),var(--card));border:1px solid var(--accent);border-radius:12px;padding:24px;text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<span class="emoji">⚗️</span>
+<h1>alchemind</h1>
+<p class="tagline">De novo molecular discovery — invent, predict, and validate novel chemical compounds end to end.</p>
+<div class="btns">
+<a class="btn btn-primary" href="https://github.com/AravindB98/alchemind">View on GitHub</a>
+<a class="btn btn-ghost" href="#demo-sec">▶ Try the Demo</a>
+</div>
+</div></header>
+<div class="wrap">
+<section><h2>🧒 What is this? (Plain English)</h2><div class="card"><p>Imagine LEGO for molecules: a computer that invents brand-new chemical compounds by snapping atomic pieces together, then double-checks its inventions are stable, safe, and actually makeable. Alchemind is that end-to-end pipeline — invent, predict properties, validate.</p></div></section>
+<section><h2>✨ Key Features</h2><div class="grid"><div class="card"><strong>Generative design</strong><p style="color:var(--muted);margin-top:6px">Models propose brand-new molecules atom by atom.</p></div><div class="card"><strong>Property prediction</strong><p style="color:var(--muted);margin-top:6px">Estimate drug-likeness, solubility, and more before synthesis.</p></div><div class="card"><strong>Validation pipeline</strong><p style="color:var(--muted);margin-top:6px">RDKit-backed sanity, stability, and novelty checks.</p></div><div class="card"><strong>End-to-end</strong><p style="color:var(--muted);margin-top:6px">One platform from idea to validated candidate.</p></div></div></section>
+<section id="demo-sec"><h2>🕹️ Interactive Demo</h2>
+<p class="demo-hint">Generate a candidate molecule, view predicted properties, then validate it. <em>(Illustrative in-browser simulation of what the real system does.)</em></p>
+<div class="card" id="demo"><canvas id="al-c" width="420" height="260" style="float:left;margin-right:18px"></canvas>
+<div id="al-props" class="mono" style="overflow:hidden;padding-top:6px;color:var(--muted)">Press Generate…</div>
+<div style="clear:both;padding-top:10px"><button class="demo-btn" onclick="alGen()">🧪 Generate molecule</button>
+<button class="demo-btn ghost" onclick="alVal()">✅ Validate</button></div></div></section>
+<section><h2>🧰 Tech Stack</h2><div><span class="chip">Python</span><span class="chip">RDKit</span><span class="chip">generative molecular models</span><span class="chip">property prediction</span><span class="chip">validation pipeline</span></div></section>
+<section><h2>🌍 Real-Life Applications</h2><ul class="apps"><li>Early-stage drug discovery — generating candidate molecules cheaply</li><li>Materials science — hunting for compounds with target properties</li><li>Chemistry education — visualizing how structure drives properties</li></ul></section>
+<section><h2>⭐ Support the Project</h2><div class="star-cta">
+<p style="margin-bottom:14px">If this project is useful or interesting to you, <strong>starring ⭐ and forking 🍴 the repo</strong> is the best way to support it and help others find it.</p>
+<div class="btns">
+<a class="btn btn-primary" href="https://github.com/AravindB98/alchemind/stargazers">⭐ Star</a>
+<a class="btn btn-ghost" href="https://github.com/AravindB98/alchemind/fork">🍴 Fork</a>
+<a class="btn btn-ghost" href="https://github.com/AravindB98/alchemind/issues">💬 Contribute</a>
+</div></div></section>
+</div>
+<footer>Built by <a href="https://github.com/AravindB98">Aravind Balaji</a> · <a href="https://aravindbalaji.com">aravindbalaji.com</a> · <a href="https://medium.com/@aravindbalaji25">Medium</a></footer>
+<script>
+
+const ac=document.getElementById('al-c'),actx=ac.getContext('2d');let mol=null;
+function alGen(){const n=6+Math.floor(Math.random()*5),atoms=[],EL=['C','C','C','N','O'];
+for(let i=0;i<n;i++){const a=i/n*6.28;atoms.push({x:210+90*Math.cos(a)+(Math.random()*30-15),y:130+80*Math.sin(a)+(Math.random()*24-12),e:EL[Math.floor(Math.random()*EL.length)]});}
+mol={atoms,mw:(120+Math.random()*180).toFixed(1),logp:(Math.random()*4-0.5).toFixed(2),qed:(0.45+Math.random()*0.5).toFixed(2)};
+actx.fillStyle='#0a0e14';actx.fillRect(0,0,420,260);actx.strokeStyle='#8b949e';
+atoms.forEach((a,i)=>{const b=atoms[(i+1)%n];actx.beginPath();actx.moveTo(a.x,a.y);actx.lineTo(b.x,b.y);actx.stroke();
+if(i%3===0&&n>6){const c=atoms[(i+2)%n];actx.beginPath();actx.moveTo(a.x,a.y);actx.lineTo(c.x,c.y);actx.stroke();}});
+atoms.forEach(a=>{actx.fillStyle={C:'#e6edf3',N:'#5c9dff',O:'#f85149'}[a.e];actx.beginPath();actx.arc(a.x,a.y,11,0,7);actx.fill();
+actx.fillStyle='#0d1117';actx.font='bold 11px monospace';actx.fillText(a.e,a.x-4,a.y+4);});
+document.getElementById('al-props').innerHTML='Candidate #'+Math.floor(Math.random()*9000+1000)+'<br>MW: '+mol.mw+' g/mol<br>logP: '+mol.logp+'<br>QED (drug-likeness): '+mol.qed+'<br><span style="color:#d29922">⏳ not yet validated</span>';}
+function alVal(){if(!mol)return;const ok=+mol.qed>0.6;
+document.getElementById('al-props').innerHTML+=ok?'<br><span style="color:#3fb950">✓ RDKit sanity ✓ novelty ✓ stability — VALID candidate</span>':'<br><span style="color:#f85149">✗ QED below threshold — rejected, regenerating advised</span>';}
+alGen();
+
+</script>
+</body>
+</html>
